@@ -13,6 +13,7 @@ const moment = require('moment');
 dotenv.config();
 
 // 라우터
+const authRouter = require('./routes/auth');
 
 // DB 연결 및 설정
 const { sequelize } = require('./models');
@@ -66,6 +67,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // 라우터 연결
+app.use('/auth', authRouter);
 
 // 404 에러 처리 미들웨어
 app.use((req, res, next) => {
