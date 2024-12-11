@@ -13,6 +13,6 @@ figlet('dotcom', (figletError, data) => {
     // 포트 가져와서 서버 실행
     const PORT = app.get('port');
     app.listen(PORT, () => {
-        console.info(chalk.yellow.bold(PORT), chalk.yellow.bold('PORT'));
+        console.info(chalk.yellow.bold(PORT), chalk.yellow.bold('PORT 준비 완료'));
     });
 });

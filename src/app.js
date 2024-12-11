@@ -22,7 +22,7 @@ const { connectDB } = require('./config/database');
 async function initializeDB() {
     try {
         await connectDB();
-        await sequelize.sync({ force: true });
+        await sequelize.sync({ force: false });
         console.log(chalk.yellow.bold('DATABASE CONNECTION SUCCESS'));
     } catch (error) {
         console.error(error);
@@ -52,11 +52,11 @@ app.use(customMorgan);
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(process.env.COOKIE_SECRET || 'gambaesi'));
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.COOKIE_SECRET || 'gambaesi',
     cookie: {
         httpOnly: true,
         secure: false,
