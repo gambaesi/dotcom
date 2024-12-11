@@ -1,0 +1,11 @@
+# macOS에서 자동으로 생성되는 .DS_Store 파일을 무시
+.DS_Store
+
+# Node.js 의존성 관련 폴더와 파일
+node_modules/
+
+# 환경 변수 파일
+.env
+
+# 로그 파일
+*.log
