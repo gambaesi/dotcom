@@ -9,34 +9,32 @@ const passport = require('passport');
 const chalk = require('chalk');
 const moment = require('moment');
 
-const { connectDB } = require('./config/database');
-
 // 환경 변수 로드
 dotenv.config();
 
 // 라우터
 
 // DB 연결 및 설정
-//const { sequelize } = require('./models');
-//const passportConfig = require('./passport');
-//passportConfig();
+const { sequelize } = require('./models');
+const { connectDB } = require('./config/database');
 
-connectDB();
+// DB 연결 확인
+async function initializeDB() {
+    try {
+        await connectDB();
+        await sequelize.sync({ force: true });
+        console.log(chalk.yellow.bold('DATABASE CONNECTION SUCCESS'));
+    } catch (error) {
+        console.error(error);
+    }
+}
+initializeDB();
 
 // 앱 생성
 const app = express();
 
 // 포트 설정
 app.set('port', process.env.PORT || 3051);
-
-// DB 연결 확인
-// sequelize.sync()
-//     .then(() => {
-//         console.log(chalk.yellow.bold('DATABASE CONNECTION SUCCESS'));
-//     })
-//     .catch((err) => {
-//         console.error(err);
-//     });
 
 // 미들웨어
 const customMorgan = morgan((tokens, req, res) => {

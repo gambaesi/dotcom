@@ -1,22 +1,11 @@
-/*
-config/databas.js
-DB 연결을 책임지고, 설정 및 연결 상태를 관리합니다.
-*/
-
 const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const config = require('./config')[process.env.NODE_ENV || 'development'];
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-        host: process.env.DB_HOST,
-        dialect: 'mysql',
-        logging: false,
-    }
+    config.database,
+    config.username,
+    config.password,
+    config
 )
 
 const connectDB = async () => {

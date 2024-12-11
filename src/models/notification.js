@@ -41,4 +41,4 @@ class Notification extends Sequelize.Model {
     }
 }
 
-module.exports = SocialAccount;
+module.exports = Notification;
