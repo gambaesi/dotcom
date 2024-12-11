@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon src/app"
+    "start": "nodemon src/server"
   },
   "author": "seoyoung",
   "license": "ISC",
