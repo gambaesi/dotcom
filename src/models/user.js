@@ -5,11 +5,6 @@ class User extends Sequelize.Model {
         // 모델 정보, 테이블 정보 입력
 
         User.init({
-            id: {
-                type: Sequelize.BIGINT.UNSIGNED,
-                autoIncrement: true,
-                primaryKey: true,
-            },
             loginId: {
                 type: Sequelize.STRING(50),
                 allowNull: false, // null허용 X
@@ -29,14 +24,14 @@ class User extends Sequelize.Model {
                 type: Sequelize.STRING(50),
                 allowNull: false,
             },
+            gender: {
+                type: Sequelize.ENUM('M', 'F', 'O'), // 남성, 여성, 기타/비공개
+                allowNull: false,
+            },
             birthDate: {
                 type: Sequelize.DATE,
                 allowNull: false,
                 field: 'birth_date'
-            },
-            gender: {
-                type: Sequelize.ENUM('M', 'F', 'O'), // 남성, 여성, 기타/비공개
-                allowNull: false,
             },
             phoneNumber: {
                 type: Sequelize.STRING(15),
