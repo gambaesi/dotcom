@@ -1,0 +1,87 @@
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const path = require('path');
+const session = require('express-session');
+const dotenv = require('dotenv');
+const passport = require('passport');
+
+const chalk = require('chalk');
+const moment = require('moment');
+
+const { connectDB } = require('./config/database');
+
+// 환경 변수 로드
+dotenv.config();
+
+// 라우터
+
+// DB 연결 및 설정
+//const { sequelize } = require('./models');
+//const passportConfig = require('./passport');
+//passportConfig();
+
+connectDB();
+
+// 앱 생성
+const app = express();
+
+// 포트 설정
+app.set('port', process.env.PORT || 3051);
+
+// DB 연결 확인
+// sequelize.sync()
+//     .then(() => {
+//         console.log(chalk.yellow.bold('DATABASE CONNECTION SUCCESS'));
+//     })
+//     .catch((err) => {
+//         console.error(err);
+//     });
+
+// 미들웨어
+const customMorgan = morgan((tokens, req, res) => {
+    return [
+        chalk.green.bold(moment().format('YYYY-MM-DD HH:mm:ss')),
+        chalk.yellow.bold(tokens.method(req, res)),
+        chalk.yellow.bold(tokens.url(req, res)),
+        chalk.green.bold(tokens.status(req, res)),
+        chalk.blue.bold(tokens['response-time'](req, res), 'ms'), '-',
+        tokens.res(req, res, 'content-length'),
+        chalk.bold(tokens['remote-addr'](req, res))
+    ].join(' ');
+});
+app.use(customMorgan);
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// 라우터 연결
+
+// 404 에러 처리 미들웨어
+app.use((req, res, next) => {
+    const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+    error.status = 404;
+    next(error);
+});
+
+// 에러 핸들링 미들웨어
+app.use((err, req, res, next) => {
+    res.locals.message = err.message;
+    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+    res.status(err.status || 500);
+    res.json({ message: err });
+});
+
+module.exports = app; // Express 앱을 내보냄
