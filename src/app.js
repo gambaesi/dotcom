@@ -77,11 +77,16 @@ app.use((req, res, next) => {
 });
 
 // 에러 핸들링 미들웨어
-app.use((err, req, res, next) => {
-    res.locals.message = err.message;
-    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-    res.status(err.status || 500);
-    res.json({ message: err });
+app.use((error, req, res, next) => {
+    console.log(chalk.red('에러 처리 미들웨어로 도착했어요'));
+    console.log(chalk.red('Error Name:'), error?.name);
+    console.log(chalk.red('Error Message:'), error?.message);
+    console.log(chalk.red('Error Stack:'), error?.stack);
+
+    res.status(error.status || 500).json({
+        message: error.message || '서버 내부 오류가 발생했습니다.',
+    });
+
 });
 
 module.exports = app; // Express 앱을 내보냄
