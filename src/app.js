@@ -9,6 +9,8 @@ const passport = require('passport');
 const chalk = require('chalk');
 const moment = require('moment');
 
+const responseMiddleware = require('./middleware/responseMiddleware');
+
 // 환경 변수 로드
 dotenv.config();
 
@@ -65,6 +67,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(responseMiddleware);
 
 // 라우터 연결
 app.use('/auth', authRouter);
@@ -84,9 +87,10 @@ app.use((error, req, res, next) => {
     console.log(chalk.red('Error Stack:'), error?.stack);
 
     res.status(error.status || 500).json({
+        status: 'error',
         message: error.message || '서버 내부 오류가 발생했습니다.',
+        error: error?.name || 'UNKNOWN_ERROR'
     });
-
 });
 
 module.exports = app; // Express 앱을 내보냄
