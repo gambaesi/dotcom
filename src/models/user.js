@@ -46,7 +46,7 @@ class User extends Sequelize.Model {
     static associate(db) {
         // 테이블 관계 입력
         // 1:N
-        db.User.hasMany(db.Post, { foreignKey: 'user_id', sourceKey: 'id' });
+        db.User.hasMany(db.Post, { foreignKey: 'author_id', sourceKey: 'id' });
         db.User.hasMany(db.Comment, { foreignKey: 'user_id', sourceKey: 'id' });
         db.User.hasMany(db.Notification, { foreignKey: 'user_id', sourceKey: 'id' });
     }

@@ -13,6 +13,23 @@ class Post extends Sequelize.Model {
                 type: Sequelize.TEXT,
                 allowNull: false,
             },
+            authorId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                field: 'author_id',
+                comment: '작성자 ID',
+            },
+            isPublished: {
+                type: Sequelize.BOOLEAN,
+                defaultValue: false,
+                field: 'is_published',
+                comment: '게시글 공개 여부',
+              },
+            views: {
+                type: Sequelize.INTEGER,
+                defaultValue: 0,
+                comment: '게시글 조회수',
+              }
             // categoryId: {
             //     type: Sequelize.INTEGER,
             //     allowNull: true,
@@ -34,7 +51,7 @@ class Post extends Sequelize.Model {
         db.Post.hasMany(db.Comment, { foreignKey: 'post_id', sourceKey: 'id' });
         db.Post.hasMany(db.Like, { foreignKey: 'post_id', sourceKey: 'id' });
         // N:1 (단방향 관계)
-        db.Post.belongsTo(db.User, { foreignKey: 'user_id', targetKey: 'id' });
+        db.Post.belongsTo(db.User, { foreignKey: 'author_id', targetKey: 'id' });
         //db.Post.belongsTo(db.Category, { foreignKey: 'category_id', targetKey: 'id' });
         // N:N (다대다)
         db.Post.belongsToMany(db.Tag, { through: 'PostTags', foreignKey: 'post_id', otherKey: 'tag_id' });
