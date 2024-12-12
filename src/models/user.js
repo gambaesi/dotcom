@@ -23,7 +23,7 @@ class User extends Sequelize.Model {
                 defaultValue: 'O'
             },
             birthDate: {
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
                 allowNull: true,
                 field: 'birth_date'
             },
