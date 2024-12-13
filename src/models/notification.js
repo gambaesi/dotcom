@@ -21,6 +21,7 @@ class Notification extends Sequelize.Model {
             },
             isRead: {
                 type: Sequelize.BOOLEAN,
+                allowNull: false,
                 defaultValue: false,
                 field: 'is_read',
             },

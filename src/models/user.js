@@ -20,6 +20,7 @@ class User extends Sequelize.Model {
             },
             gender: {
                 type: Sequelize.ENUM('M', 'F', 'O'), // 남성, 여성, 기타/비공개
+                allowNull: false,
                 defaultValue: 'O'
             },
             birthDate: {

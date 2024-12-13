@@ -21,15 +21,17 @@ class Post extends Sequelize.Model {
             },
             isPublished: {
                 type: Sequelize.BOOLEAN,
+                allowNull: false,
                 defaultValue: false,
                 field: 'is_published',
                 comment: '게시글 공개 여부',
-              },
+            },
             views: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
                 defaultValue: 0,
                 comment: '게시글 조회수',
-              }
+            }
             // categoryId: {
             //     type: Sequelize.INTEGER,
             //     allowNull: true,
