@@ -16,6 +16,7 @@ dotenv.config();
 
 // 라우터
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/post');
 
 // DB 연결 및 설정
 const { sequelize } = require('./models');
@@ -71,6 +72,7 @@ app.use(responseMiddleware);
 
 // 라우터 연결
 app.use('/auth', authRouter);
+app.use('/posts', postRouter);
 
 // 404 에러 처리 미들웨어
 app.use((req, res, next) => {
