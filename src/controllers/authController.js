@@ -34,7 +34,7 @@ exports.login = async (req, res, next) => {
             return res.error(result.error, 'INVALID_CREDENTIALS', 400);
         }
 
-        return res.success('로그인에 성공했습니다.', { user: result }, 200);
+        return res.success('로그인에 성공했습니다.', result , 200);
     } catch (error) {
         next(error);
     }

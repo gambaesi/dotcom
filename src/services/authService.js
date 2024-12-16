@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
@@ -43,7 +44,21 @@ exports.login = async ({ email, password }) => {
             return { error: '비밀번호가 일치하지 않습니다. 다시 시도해주세요.' };
         }
 
-        return { id: user.id, email: user.email };
+        // 액세스 토큰 생성
+        const accessToken = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        // 리프레시 토큰 생성
+        const refreshToken = jwt.sign(
+            { id: user.id },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        return { accessToken, refreshToken };
     } catch (error) {
         throw error;
     }
