@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { signup, login, logout } = require('../controllers/authController');
+const { signup, login, logout, refreshAccessToken } = require('../controllers/authController');
 
 // 회원가입
 router.post('/signup', signup);
@@ -12,5 +12,8 @@ router.post('/login/social');
 
 // 로그아웃
 router.post('/logout', logout);
+
+// 새로운 엑세스 토큰 발급
+router.post('/refresh-token', refreshAccessToken);
 
 module.exports = router;

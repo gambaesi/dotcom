@@ -59,3 +59,25 @@ exports.logout = (req, res, next) => {
         next(error);
     }
 }
+
+exports.refreshAccessToken = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            return res.error('리프레시 토큰이 없습니다.', 'MISSING_REFRESH_TOKEN', 400);
+        }
+
+        const result = await authService.refreshAccessToken(refreshToken);
+
+        if (result.error) {
+            return res.error(result.error, result.code || 'INVALID_REFRESH_TOKEN', 401);
+        }
+
+        res.setHeader('Authorization', `Bearer ${result.newAccessToken}`);
+
+        return res.success('액세스 토큰이 재발급되었습니다.', {}, 200);
+    } catch (error) {
+        next(error);
+    }
+}

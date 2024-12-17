@@ -63,3 +63,26 @@ exports.login = async ({ email, password }) => {
         throw error;
     }
 }
+
+exports.refreshAccessToken = async (refreshToken) => {
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+
+        const userId = decoded.id;
+
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return { error: '사용자를 찾을 수 없습니다.', code: 'USER_NOT_FOUND' };
+        }
+
+        const newAccessToken = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        return { newAccessToken };
+    } catch (error) {
+        throw error;
+    }
+};
