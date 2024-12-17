@@ -56,7 +56,7 @@ class Post extends Sequelize.Model {
         db.Post.belongsTo(db.User, { foreignKey: 'author_id', targetKey: 'id' });
         //db.Post.belongsTo(db.Category, { foreignKey: 'category_id', targetKey: 'id' });
         // N:N (다대다)
-        db.Post.belongsToMany(db.Tag, { through: 'PostTags', foreignKey: 'post_id', otherKey: 'tag_id' });
+        db.Post.belongsToMany(db.Tag, { through: db.PostTag, foreignKey: 'post_id', otherKey: 'tag_id' });
     }
 }
 

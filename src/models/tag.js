@@ -21,7 +21,7 @@ class Tag extends Sequelize.Model {
 
     static associate(db) {
         // N:N (다대다)
-        db.Tag.belongsToMany(db.Post, { through: 'PostTags', foreignKey: 'tag_id', otherKey: 'post_id' });
+        db.Tag.belongsToMany(db.Post, { through: db.PostTag, foreignKey: 'tag_id', otherKey: 'post_id' });
     }
 }
 
