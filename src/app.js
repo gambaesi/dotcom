@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 
 const chalk = require('chalk');
-const moment = require('moment');
+const dayjs = require('dayjs');
 
 const responseMiddleware = require('./middleware/response');
 
@@ -43,7 +43,7 @@ app.set('port', process.env.PORT || 3051);
 // 미들웨어
 const customMorgan = morgan((tokens, req, res) => {
     return [
-        chalk.green.bold(moment().format('YYYY-MM-DD HH:mm:ss')),
+        chalk.green.bold(dayjs().format('YYYY-MM-DD HH:mm:ss')),
         chalk.yellow.bold(tokens.method(req, res)),
         chalk.yellow.bold(tokens.url(req, res)),
         chalk.green.bold(tokens.status(req, res)),
