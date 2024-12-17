@@ -10,7 +10,6 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: 'mysql',
     logging: console.log,
-    timezone: '+09:00',
   },
   test: {
     username: process.env.DB_USER,
