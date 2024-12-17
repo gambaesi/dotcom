@@ -1,4 +1,4 @@
-function successResponse(message, data = {}) {
+const successResponse = (message, data = {}) => {
     return {
         status: "success",
         message,
@@ -6,7 +6,7 @@ function successResponse(message, data = {}) {
     };
 };
 
-function errorResponse(message, error = null) {
+const errorResponse = (message, error = null) => {
     return {
         status: "error",
         message,
