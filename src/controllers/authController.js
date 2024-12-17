@@ -3,6 +3,7 @@ const authService = require('../services/authService');
 exports.signup = async (req, res, next) => {
     try{
         const { email, password, name, ...optionalData } = req.body;
+
         if (!email || !password || !name) {
             return res.error('필수 입력값이 누락되었습니다.', 'MISSING_REQUIRED_FIELDS', 400);
         }
@@ -23,6 +24,7 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+
         if (!email || !password) {
             return res.error('이메일과 비밀번호를 입력해주세요.', 'MISSING_CREDENTIALS', 400);
         }
@@ -34,7 +36,17 @@ exports.login = async (req, res, next) => {
             return res.error(result.error, 'INVALID_CREDENTIALS', 400);
         }
 
-        return res.success('로그인에 성공했습니다.', result , 200);
+        const { accessToken, refreshToken } = result;
+
+        res.setHeader('Authorization', `Bearer ${accessToken}`);
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        return res.success('로그인에 성공했습니다.', {} , 200);
     } catch (error) {
         next(error);
     }
