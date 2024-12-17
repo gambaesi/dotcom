@@ -9,7 +9,7 @@ const passport = require('passport');
 const chalk = require('chalk');
 const moment = require('moment');
 
-const responseMiddleware = require('./middleware/responseMiddleware');
+const responseMiddleware = require('./middleware/response');
 
 // 환경 변수 로드
 dotenv.config();

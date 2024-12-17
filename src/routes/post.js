@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/authMiddleware');
+const authenticateToken = require('../middleware/auth');
 const { createPost, updatePostById, softDeletePostById, getPostById, getPosts } = require('../controllers/postController');
 
 // 인증 미들웨어
