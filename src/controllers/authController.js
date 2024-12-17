@@ -4,10 +4,6 @@ exports.signup = async (req, res, next) => {
     try{
         const { email, password, name, ...optionalData } = req.body;
 
-        if (!email || !password || !name) {
-            return res.error('필수 입력값이 누락되었습니다.', 'MISSING_REQUIRED_FIELDS', 400);
-        }
-
         const result = await authService.createUser({ email, password, name, ...optionalData });
 
         // 중복된 이메일 처리
