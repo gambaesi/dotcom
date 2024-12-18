@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const dayjs = require('dayjs');
 const User = require('../models/user');
 
 exports.createUser = async ({ email, password, name, ...optionalData }) => {
@@ -15,7 +16,7 @@ exports.createUser = async ({ email, password, name, ...optionalData }) => {
 
         // 생년월일 타입
         if (optionalData.birthDate) {
-            optionalData.birthDate = new Date(optionalData.birthDate);
+            optionalData.birthDate = dayjs(optionalData.birthDate).toDate();
         }
 
         // 유저 생성

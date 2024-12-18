@@ -1,3 +1,4 @@
+const dayjs = require('dayjs');
 const { Op } = require('sequelize');
 const Post = require('../models/post');
 
@@ -67,8 +68,8 @@ exports.getPostById = async (postId) => {
 
 exports.getPosts = async ({ page, limit , sortBy, sortOrder, filters }) => {
     try {
-        if (filters.afterDate && filters.beforeDate && new Date(filters.afterDate) > new Date(filters.beforeDate)) {
-            return { error: 'afterDate가 beforeDate보다 나중일 수 없습니다.', code: 'INVALID_DATE_RANGE' };
+        if (filters.startDate && filters.endDate && dayjs(filters.startDate).isAfter(dayjs(filters.endDate))) {
+            return { error: 'startDate가 endDate보다 나중일 수 없습니다.', code: 'INVALID_DATE_RANGE' };
         }
 
         const offset = (page - 1) * limit;
@@ -82,13 +83,24 @@ exports.getPosts = async ({ page, limit , sortBy, sortOrder, filters }) => {
         const filterMapping = {
             title: (value) => ({ title: { [Op.like]: `%${value}%` } }),
             content: (value) => ({ content: { [Op.like]: `%${value}%` } }),
-            afterDate: (value) => ({ createdAt: { [Op.gte]: new Date(value) } }),
-            beforeDate: (value) => ({ createdAt: { [Op.lte]: new Date(value) } }),
+            startDate: (value) => ({ createdAt: { [Op.gte]: dayjs(value).startOf('day').toDate() } }),
+            endDate: (value) => ({ createdAt: { [Op.lte]: dayjs(value).endOf('day').toDate() } }),
         };
 
         Object.entries(filters).forEach(([key, value]) => {
             if (filterMapping[key] && value !== undefined && value !== null && value !== '') {
-                options.where = { ...options.where, ...filterMapping[key](value) };
+                if (key === 'startDate' || key === 'endDate') {
+                    if (!options.where.createdAt) {
+                        options.where.createdAt = {};
+                    }
+                    if (key === 'startDate') {
+                        options.where.createdAt[Op.gte] = dayjs(value).startOf('day').toDate();
+                    } else if (key === 'endDate') {
+                        options.where.createdAt[Op.lte] = dayjs(value).endOf('day').toDate();
+                    }
+                } else {
+                    options.where = { ...options.where, ...filterMapping[key](value) };
+                }
             }
         });
 
