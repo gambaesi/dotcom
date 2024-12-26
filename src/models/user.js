@@ -26,11 +26,13 @@ class User extends Sequelize.Model {
             birthDate: {
                 type: Sequelize.DATEONLY,
                 allowNull: true,
+                defaultValue: null,
                 field: 'birth_date'
             },
             phoneNumber: {
                 type: Sequelize.STRING(15),
                 allowNull: true,
+                defaultValue: null,
                 field: 'phone_number',
             }
         }, {

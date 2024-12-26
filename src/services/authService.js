@@ -27,7 +27,18 @@ exports.createUser = async ({ email, password, name, ...optionalData }) => {
             ...optionalData
         });
 
-        return newUser;
+        const userResponse = {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+            gender: newUser.gender,
+            birthDate: newUser.birthDate,
+            phoneNumber: newUser.phoneNumber,
+            createdAt: newUser.createdAt,
+            updatedAt: newUser.updatedAt
+        };
+
+        return userResponse;
     } catch (error) {
         throw error;
     }
