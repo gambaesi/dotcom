@@ -21,10 +21,6 @@ exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
-            return res.error('이메일과 비밀번호를 입력해주세요.', 'MISSING_CREDENTIALS', 400);
-        }
-
         const result = await authService.login({ email, password });
 
         // 이메일이나 비밀번호가 틀린 경우

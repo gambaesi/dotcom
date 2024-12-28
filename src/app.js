@@ -91,7 +91,7 @@ app.use((error, req, res, next) => {
     res.status(error.status || 500).json({
         status: 'error',
         message: error.message || '서버 내부 오류가 발생했습니다.',
-        error: error?.name || 'UNKNOWN_ERROR'
+        error: error?.name || 'INTERNAL_SERVER_ERROR'
     });
 });
 

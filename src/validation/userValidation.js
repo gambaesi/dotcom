@@ -18,4 +18,17 @@ const signUpSchema = Joi.object({
     phoneNumber: Joi.string()
 })
 
-module.exports = { signUpSchema }
+const loginSchema = Joi.object({
+    email: Joi.string().email().required().messages({
+        'string.email': '유효한 이메일 형식이 아닙니다.',
+        'any.required': '이메일을 입력해주세요.',
+        'string.empty': '이메일을 입력해주세요.',
+    }),
+    password: Joi.string().required().messages({
+        'any.required': '비밀번호를 입력해주세요.',
+        'string.empty': '비밀번호를 입력해주세요.',
+    })
+});
+
+
+module.exports = { signUpSchema, loginSchema }
