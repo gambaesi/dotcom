@@ -3,7 +3,7 @@ const validate = (schema) => {
         const { error } = schema.validate(req.body, { abortEarly: false });
         if (error) {
             const errorMessages = error.details.map((detail) => detail.message);
-            return res.error(errorMessages, 'VALIDATION_ERROR', 422);
+            return res.error(errorMessages, 'VALIDATION_ERROR', 400);
         }
         next();
     };
