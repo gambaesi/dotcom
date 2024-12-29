@@ -36,7 +36,7 @@ exports.softDeletePostById = async (req, res, next) => {
         const result = await postService.softDeletePostById(id);
 
         if (result.error) {
-            return res.error(result.error, result.code, 400);
+            return res.error(result.error, result.code, 404);
         }
 
         return res.success('게시글 삭제가 완료되었습니다.', result, 204);

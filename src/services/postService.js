@@ -26,7 +26,6 @@ exports.updatePostById = async (postId, updateData) => {
         }
 
         const updatedPost = await Post.findByPk(postId);
-        console.log(updatedPost)
 
         return updatedPost;
     } catch (error) {
