@@ -6,7 +6,7 @@ exports.createPost = async (req, res, next) => {
 
         const result = await postService.createPost({ title, content, authorId, isPublished, ...optionalData });
 
-        return res.success('게시글 작성이 완료되었습니다', { post: result }, 201);
+        return res.success('게시글 작성이 완료되었습니다.', { post: result }, 201);
     } catch (error) {
         next(error);
     }
@@ -20,10 +20,10 @@ exports.updatePostById = async (req, res, next) => {
         const result = await postService.updatePostById(id, updateData);
 
         if (result.error) {
-            return res.error(result.error, result.code, 400);
+            return res.error(result.error, result.code, 404);
         }
 
-        return res.success('게시글 수정이 완료되었습니다', { post: result }, 200);
+        return res.success('게시글 수정이 완료되었습니다.', { post: result }, 200);
     } catch (error) {
         next(error);
     }
@@ -39,7 +39,7 @@ exports.softDeletePostById = async (req, res, next) => {
             return res.error(result.error, result.code, 400);
         }
 
-        return res.success('게시글 삭제가 완료되었습니다', result, 204);
+        return res.success('게시글 삭제가 완료되었습니다.', result, 204);
     } catch (error) {
         next(error);
     }
@@ -55,7 +55,7 @@ exports.getPostById = async (req, res, next) => {
             return res.error(result.error, result.code, 400);
         }
 
-        return res.success('게시글 조회가 완료되었습니다', result, 200);
+        return res.success('게시글 조회가 완료되었습니다.', result, 200);
     } catch (error) {
         next(error);
     }
@@ -87,7 +87,7 @@ exports.getPosts = async (req, res, next) => {
             return res.error(result.error, result.code, 400);
         }
 
-        return  res.success('게시글 조회가 완료되었습니다', result, 200);
+        return  res.success('게시글 조회가 완료되었습니다.', result, 200);
     } catch (error) {
         next(error);
     }

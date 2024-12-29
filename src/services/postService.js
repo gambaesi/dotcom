@@ -22,7 +22,7 @@ exports.updatePostById = async (postId, updateData) => {
     try {
         const [updateCount] = await Post.update(updateData, { fields: updateData, where: { id: postId } });
         if (updateCount ===0) {
-            return { error: '해당 게시글을 찾을 수 없습니다', code: 'POST_NOT_FOUND' };
+            return { error: '해당 게시글을 찾을 수 없습니다.', code: 'POST_NOT_FOUND' };
         }
 
         const updatedPost = await Post.findByPk(postId);

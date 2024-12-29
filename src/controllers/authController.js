@@ -8,7 +8,7 @@ exports.signup = async (req, res, next) => {
 
         // 중복된 이메일 처리
         if (result.error) {
-            return res.error(result.error, 'DUPLICATE_EMAIL', 400);
+            return res.error(result.error, 'DUPLICATE_EMAIL', 409);
         }
 
         return res.success('회원 가입이 완료되었습니다', { user: result }, 201);
@@ -25,7 +25,7 @@ exports.login = async (req, res, next) => {
 
         // 이메일이나 비밀번호가 틀린 경우
         if (result.error) {
-            return res.error(result.error, 'INVALID_CREDENTIALS', 400);
+            return res.error(result.error, 'INVALID_CREDENTIALS', 401);
         }
 
         const { accessToken, refreshToken } = result;
