@@ -3,12 +3,12 @@ const Joi = require('joi');
 const createPostSchema = Joi.object({
     title: Joi.string().required().messages({
         "string.base": "제목은 문자열이어야 합니다.",
-        "string.empty": "제목은 필수 입력값입니다.",
+        "string.empty": "제목은 빈 문자열일 수 없습니다.",
         "any.required": "제목은 필수 입력값입니다."
     }),
     content: Joi.string().required().messages({
         "string.base": "내용은 문자열이어야 합니다.",
-        "string.empty": "내용은 필수 입력값입니다.",
+        "string.empty": "내용은 빈 문자열일 수 없습니다.",
         "any.required": "내용은 필수 입력값입니다."
     }),
     authorId: Joi.number().integer().positive().required().messages({
@@ -23,19 +23,16 @@ const createPostSchema = Joi.object({
 });
 
 const updatePostSchema = Joi.object({
-    title: Joi.string().required().messages({
+    title: Joi.string().messages({
         "string.base": "제목은 문자열이어야 합니다.",
-        "string.empty": "제목은 필수 입력값입니다.",
-        "any.required": "제목은 필수 입력값입니다."
+        "string.empty": "제목은 빈 문자열일 수 없습니다."
     }),
-    content: Joi.string().required().messages({
+    content: Joi.string().messages({
         "string.base": "내용은 문자열이어야 합니다.",
-        "string.empty": "내용은 필수 입력값입니다.",
-        "any.required": "내용은 필수 입력값입니다."
+        "string.empty": "내용은 빈 문자열일 수 없습니다."
     }),
-    isPublished: Joi.boolean().required().messages({
-        "boolean.base": "게시 여부는 boolean 값이어야 합니다.",
-        "any.required": "게시 여부는 필수 입력값입니다."
+    isPublished: Joi.boolean().messages({
+        "boolean.base": "게시 여부는 boolean 값이어야 합니다."
     }),
 });
 
