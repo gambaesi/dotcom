@@ -5,6 +5,7 @@ const path = require('path');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
+const cors = require('cors');
 
 const chalk = require('chalk');
 const dayjs = require('dayjs');
@@ -41,6 +42,7 @@ const app = express();
 app.set('port', process.env.PORT || 3051);
 
 // 미들웨어
+app.use(cors());
 const customMorgan = morgan((tokens, req, res) => {
     return [
         chalk.green.bold(dayjs().format('YYYY-MM-DD HH:mm:ss')),
