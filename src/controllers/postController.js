@@ -3,12 +3,6 @@ const postService = require('../services/postService');
 exports.createPost = async (req, res, next) => {
     try{
         const { title, content, authorId, isPublished, ...optionalData } = req.body;
-        if (!title || !content || typeof isPublished !== 'boolean') {
-            return res.error('필수 입력값이 누락되었습니다.', 'MISSING_REQUIRED_FIELDS', 400);
-        }
-        if (!authorId) {
-            return res.error('작성자 ID가 누락되었습니다.', 'MISSING_AUTHOR_ID', 400);
-        }
 
         const result = await postService.createPost({ title, content, authorId, isPublished, ...optionalData });
 
