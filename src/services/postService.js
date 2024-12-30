@@ -61,10 +61,6 @@ exports.getPostById = async (postId) => {
 
 exports.getPosts = async ({ page, limit , sortBy, sortOrder, filters }) => {
     try {
-        if (filters.startDate && filters.endDate && dayjs(filters.startDate).isAfter(dayjs(filters.endDate))) {
-            return { error: 'startDate가 endDate보다 나중일 수 없습니다.', code: 'INVALID_DATE_RANGE' };
-        }
-
         const offset = (page - 1) * limit;
         const options = {
             offset,

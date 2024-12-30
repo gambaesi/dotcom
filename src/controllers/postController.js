@@ -19,6 +19,7 @@ exports.updatePostById = async (req, res, next) => {
 
         const result = await postService.updatePostById(id, updateData);
 
+        // 게시글이 디비에 존재하지 않음
         if (result.error) {
             return res.error(result.error, result.code, 404);
         }
@@ -35,6 +36,7 @@ exports.softDeletePostById = async (req, res, next) => {
 
         const result = await postService.softDeletePostById(id);
 
+        // 게시글이 디비에 존재하지 않음
         if (result.error) {
             return res.error(result.error, result.code, 404);
         }
@@ -51,11 +53,12 @@ exports.getPostById = async (req, res, next) => {
 
         const result = await postService.getPostById(id);
 
+        // 게시글이 디비에 존재하지 않음
         if (result.error) {
-            return res.error(result.error, result.code, 400);
+            return res.error(result.error, result.code, 404);
         }
 
-        return res.success('게시글 조회가 완료되었습니다.', result, 200);
+        return res.success('게시글 조회가 완료되었습니다.', { post: result }, 200);
     } catch (error) {
         next(error);
     }
@@ -63,25 +66,9 @@ exports.getPostById = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
     try {
-        const { page = 1, limit = 10, sortBy = 'createdAt', sortOrder = 'DESC', ...filters } = req.query;
+        const { page, limit, sortBy, sortOrder, ...filters } = req.query;
 
-        const pageNumber = Number(page);
-        const limitNumber = Number(limit);
-        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
-            return res.error('page와 limit 값은 숫자(양수)이어야 합니다.', 'INVALID_PARAMETER', 400);
-        }
-
-        const validSortBy = ['createdAt'];
-        if (!validSortBy.includes(sortBy)) {
-            return res.error(`sortBy 값은 ${validSortBy.join(', ')} 중 하나이어야 합니다.`, 'INVALID_PARAMETER', 400);
-        }
-
-        const validSortOrder = ['ASC', 'DESC'];
-        if (!validSortOrder.includes(sortOrder.toUpperCase())) {
-            return res.error('sortOrder는 ASC 또는 DESC이어야 합니다.', 'INVALID_PARAMETER', 400);
-        }
-
-        const result = await postService.getPosts({ page: pageNumber, limit: limitNumber , sortBy, sortOrder, filters });
+        const result = await postService.getPosts({ page, limit, sortBy, sortOrder, filters });
 
         if (result.error) {
             return res.error(result.error, result.code, 400);

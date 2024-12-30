@@ -4,7 +4,7 @@ const authenticateToken = require('../middleware/auth');
 const { createPost, updatePostById, softDeletePostById, getPostById, getPosts } = require('../controllers/postController');
 
 const validate = require('../middleware/validate');
-const { createPostSchema, updatePostSchema } = require('../validation/postValidation');
+const { createPostSchema, updatePostSchema, getPostsSchema } = require('../validation/postValidation');
 
 // 인증 미들웨어
 router.use(authenticateToken);
@@ -14,6 +14,6 @@ router.post('/', validate(createPostSchema), createPost);
 router.patch('/:id', validate(updatePostSchema), updatePostById);
 router.delete('/:id', softDeletePostById);
 router.get('/:id', getPostById);
-router.get('/', getPosts);
+router.get('/', validate(getPostsSchema), getPosts);
 
 module.exports = router;

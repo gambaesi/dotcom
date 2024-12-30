@@ -17,8 +17,8 @@ const signUpSchema = Joi.object({
         "any.only": "성별은 'M', 'F', 'O' 중 하나이어야 합니다."
     }),
     birthDate: Joi.date().iso().optional().messages({
-        "date.format": "생년월일은 'YYYY-MM-DD' 형식으로 입력해주세요.",
-        "date.base": "유효한 날짜를 입력해주세요.",
+        "date.base": "생년월일은 날짜 형식이어야 합니다.",
+        "date.format": "생년월일은 'YYYY-MM-DD' 형식으로 입력해주세요."
     }),
     phoneNumber: Joi.string().pattern(/^\d{3}-\d{4}-\d{4}$/).optional().messages({
         "string.pattern.base": "전화번호는 '000-0000-0000' 형식으로 입력해주세요."
