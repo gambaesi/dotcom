@@ -66,7 +66,7 @@ exports.getPostById = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
     try {
-        const { page, limit, sortBy, sortOrder, ...filters } = req.query;
+        const { page, limit, sortBy, sortOrder, ...filters } = req.validatedData.query;
 
         const result = await postService.getPosts({ page, limit, sortBy, sortOrder, filters });
 

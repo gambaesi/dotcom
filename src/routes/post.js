@@ -14,6 +14,6 @@ router.post('/', validate(createPostSchema), createPost);
 router.patch('/:id', validate(postIdSchema, 'params'), validate(updatePostSchema), updatePostById);
 router.delete('/:id', validate(postIdSchema, 'params'), softDeletePostById);
 router.get('/:id', validate(postIdSchema, 'params'), getPostById);
-router.get('/', validate(getPostsSchema), getPosts);
+router.get('/', validate(getPostsSchema, 'query'), getPosts);
 
 module.exports = router;

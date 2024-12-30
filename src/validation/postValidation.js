@@ -64,30 +64,22 @@ const getPostsSchema = Joi.object({
         "any.only": "sortOrder 값은 ASC 또는 DESC만 허용됩니다.",
         "string.base": "sortOrder 값은 문자열이어야 합니다."
     }),
-    startDate: Joi.string().optional().custom((value, helpers) => {
-        console.log('@@value', value);
-        // 문자열을 날짜로 변환하고 검증 (쿼리 파라미터 처리 방식 이슈)
-        if (!dayjs(value, 'YYYY-MM-DD', true).isValid()) {
-            return helpers.error("any.invalid", { message: "startDate 값은 'YYYY-MM-DD' 형식으로 입력해주세요." });
-        }
-        console.log('##value', value);
-        return value;
+    startDate: Joi.date().iso().optional().messages({
+        "date.base": "startDate 값은 날짜 형식이어야 합니다.",
+        "date.format": "startDate 값은 'YYYY-MM-DD' 형식으로 입력해주세요."
     }),
-    endDate: Joi.string().optional().custom((value, helpers) => {
-        // 문자열을 날짜로 변환하고 검증 (쿼리 파라미터 처리 방식 이슈)
-        if (!dayjs(value, 'YYYY-MM-DD', true).isValid()) {
-            return helpers.error("any.invalid", { message: "endDate 값은 'YYYY-MM-DD' 형식으로 입력해주세요." });
-        }
-        return value;
+    endDate: Joi.date().iso().optional().messages({
+        "date.base": "startDate 값은 날짜 형식이어야 합니다.",
+        "date.format": "endDate 값은 'YYYY-MM-DD' 형식으로 입력해주세요."
     }),
 }).custom((value, helpers) => {
     const { startDate, endDate } = value;
     if (startDate && endDate && dayjs(startDate).isAfter(dayjs(endDate))) {
-        return helpers.error("any.invalid", { message: "startDate가 endDate보다 나중일 수 없습니다." });
+        return helpers.error("any.invalid");
     }
     return value;
 }).messages({
-    "any.invalid": "유효하지 않은 날짜 범위입니다."
+    "any.invalid": "startDate가 endDate보다 나중일 수 없습니다."
 });
 
 module.exports = { postIdSchema, createPostSchema, updatePostSchema, getPostsSchema }
