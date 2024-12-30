@@ -59,12 +59,16 @@ exports.getPostById = async (postId) => {
     }
 };
 
-exports.getPosts = async ({ page, limit , sortBy, sortOrder, filters }) => {
+exports.getPosts = async ({ page = 1, limit = 10, sortBy = 'createdAt', sortOrder = 'DESC', filters }) => {
     try {
-        const offset = (page - 1) * limit;
+        const parsedPage = parseInt(page, 10);
+        const parsedLimit = parseInt(limit, 10);
+
+        const offset = (parsedPage - 1) * parsedLimit;
+
         const options = {
             offset,
-            limit,
+            limit: parsedLimit,
             order: [[sortBy, sortOrder.toUpperCase()]],
             where: {},
         };
@@ -76,22 +80,26 @@ exports.getPosts = async ({ page, limit , sortBy, sortOrder, filters }) => {
             endDate: (value) => ({ createdAt: { [Op.lte]: dayjs(value).endOf('day').toDate() } }),
         };
 
-        Object.entries(filters).forEach(([key, value]) => {
-            if (filterMapping[key] && value !== undefined && value !== null && value !== '') {
+        // title, content, startDate, endDate
+        for (const key in filters) {
+            if (filters[key] && filterMapping[key]) {
+                const condition = filterMapping[key](filters[key]);
+
+                // startDate와 endDate의 경우 조건을 Op.and로 묶어 처리
                 if (key === 'startDate' || key === 'endDate') {
                     if (!options.where.createdAt) {
                         options.where.createdAt = {};
                     }
                     if (key === 'startDate') {
-                        options.where.createdAt[Op.gte] = dayjs(value).startOf('day').toDate();
+                        options.where.createdAt[Op.gte] = dayjs(filters[key]).startOf('day').toDate();
                     } else if (key === 'endDate') {
-                        options.where.createdAt[Op.lte] = dayjs(value).endOf('day').toDate();
+                        options.where.createdAt[Op.lte] = dayjs(filters[key]).endOf('day').toDate();
                     }
                 } else {
-                    options.where = { ...options.where, ...filterMapping[key](value) };
+                    options.where = { ...options.where, ...condition};
                 }
             }
-        });
+        }
 
         const posts = await Post.findAll(options);
 

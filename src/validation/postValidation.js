@@ -72,6 +72,8 @@ const getPostsSchema = Joi.object({
         "date.base": "startDate 값은 날짜 형식이어야 합니다.",
         "date.format": "endDate 값은 'YYYY-MM-DD' 형식으로 입력해주세요."
     }),
+    title: Joi.string().optional(),
+    content: Joi.string().optional(),
 }).custom((value, helpers) => {
     const { startDate, endDate } = value;
     if (startDate && endDate && dayjs(startDate).isAfter(dayjs(endDate))) {

@@ -70,10 +70,6 @@ exports.getPosts = async (req, res, next) => {
 
         const result = await postService.getPosts({ page, limit, sortBy, sortOrder, filters });
 
-        if (result.error) {
-            return res.error(result.error, result.code, 400);
-        }
-
         return  res.success('게시글 조회가 완료되었습니다.', result, 200);
     } catch (error) {
         next(error);
