@@ -2,7 +2,7 @@ const authService = require('../services/authService');
 
 exports.signup = async (req, res, next) => {
     try{
-        const { email, password, name, ...optionalData } = req.body;
+        const { email, password, name, ...optionalData } = req.validatedData.body;
 
         const result = await authService.createUser({ email, password, name, ...optionalData });
 
@@ -19,7 +19,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.validatedData.body;
 
         const result = await authService.login({ email, password });
 

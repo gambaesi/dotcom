@@ -2,7 +2,7 @@ const postService = require('../services/postService');
 
 exports.createPost = async (req, res, next) => {
     try{
-        const { title, content, authorId, isPublished, ...optionalData } = req.body;
+        const { title, content, authorId, isPublished, ...optionalData } = req.validatedData.body;
 
         const result = await postService.createPost({ title, content, authorId, isPublished, ...optionalData });
 
@@ -14,8 +14,8 @@ exports.createPost = async (req, res, next) => {
 
 exports.updatePostById = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const updateData = req.body;
+        const { id } = req.validatedData.params;
+        const updateData = req.validatedData.body;
 
         const result = await postService.updatePostById(id, updateData);
 
@@ -32,7 +32,7 @@ exports.updatePostById = async (req, res, next) => {
 
 exports.softDeletePostById = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { id } = req.validatedData.params;
 
         const result = await postService.softDeletePostById(id);
 
@@ -49,7 +49,7 @@ exports.softDeletePostById = async (req, res, next) => {
 
 exports.getPostById = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const { id } = req.validatedData.params;
 
         const result = await postService.getPostById(id);
 

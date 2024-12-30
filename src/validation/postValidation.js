@@ -1,6 +1,14 @@
 const Joi = require('joi');
 const dayjs = require('dayjs');
 
+const postIdSchema = Joi.object({
+    id: Joi.number().integer().required().messages({
+        "number.base": "게시글 ID(PK)는 숫자이어야 합니다.",
+        "number.integer": "게시글 ID(PK)는 정수 값이어야 합니다.",
+        "any.required": "게시글 ID는 필수 입력값입니다."
+    })
+});
+
 const createPostSchema = Joi.object({
     title: Joi.string().required().messages({
         "string.base": "제목은 문자열이어야 합니다.",
@@ -14,7 +22,7 @@ const createPostSchema = Joi.object({
     }),
     authorId: Joi.number().integer().positive().required().messages({
         "number.base": "작성자 ID(PK)는 숫자여야 합니다.",
-        "number.empty": "작성자 ID(PK)는 필수 입력값입니다.",
+        "number.integer": "작성자 ID(PK)는 정수 값이어야 합니다.",
         "any.required": "작성자 ID(PK)는 필수 입력값입니다."
     }),
     isPublished: Joi.boolean().required().messages({
@@ -82,4 +90,4 @@ const getPostsSchema = Joi.object({
     "any.invalid": "유효하지 않은 날짜 범위입니다."
 });
 
-module.exports = { createPostSchema, updatePostSchema, getPostsSchema }
+module.exports = { postIdSchema, createPostSchema, updatePostSchema, getPostsSchema }
