@@ -6,6 +6,8 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
 const cors = require('cors');
+const helmet = require('helmet');
+const hpp = require('hpp');
 
 const chalk = require('chalk');
 const dayjs = require('dayjs');
@@ -43,6 +45,15 @@ app.set('port', process.env.PORT || 3051);
 
 // 미들웨어
 app.use(cors());
+
+if (process.env.NODE_ENV === 'production') {
+    // 보안 모듈은 운영 환경에서만 활성화
+    app.use(helmet({
+        
+    })); // helmet 옵션이 다양한데, 기본 옵션 중 엄격한 경우가 많음. 상황에 따라 false 필요.
+    app.use(hpp());
+    // app.use(morgan('combined')); // 개발 시, 'dev'
+}
 const customMorgan = morgan((tokens, req, res) => {
     return [
         chalk.green.bold(dayjs().format('YYYY-MM-DD HH:mm:ss')),
