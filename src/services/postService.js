@@ -3,10 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const { Op } = require('sequelize');
 const Post = require('../models/post');
+const PostImage = require('../models/postImage');
 
 exports.createPost = async ({ title, content, authorId, isPublished, files, ...optionalData }) => {
     try {
-        const filePaths = files ? files.map(file => path.join(__dirname, `../uploads/images/posts/${authorId}`, file.filename)) : [];
         const newPost = await Post.create({
             title,
             content,
@@ -14,6 +14,15 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, ...o
             isPublished,
             ...optionalData
         });
+
+        if (files && files.length > 0) {
+            const imageRecords = files.map(file => ({
+                postId: newPost.id,
+                imageUrl: path.join(__dirname, `../uploads/images/posts/${authorId}`, file.filename),
+                originalName: file.originalname
+            }));
+            await PostImage.bulkCreate(imageRecords);
+        }
 
         return newPost;
     } catch (error) {
