@@ -9,3 +9,6 @@ node_modules/
 
 # 로그 파일
 *.log
+
+# uploads 폴더
+src/uploads/
