@@ -3,8 +3,9 @@ const postService = require('../services/postService');
 exports.createPost = async (req, res, next) => {
     try{
         const { title, content, authorId, isPublished, ...optionalData } = req.validatedData.body;
+        const files = req.files;
 
-        const result = await postService.createPost({ title, content, authorId, isPublished, ...optionalData });
+        const result = await postService.createPost({ title, content, authorId, isPublished, files, ...optionalData });
 
         return res.success('게시글 작성이 완료되었습니다.', { post: result }, 201);
     } catch (error) {

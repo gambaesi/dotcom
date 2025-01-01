@@ -1,9 +1,12 @@
 const dayjs = require('dayjs');
+const fs = require('fs');
+const path = require('path');
 const { Op } = require('sequelize');
 const Post = require('../models/post');
 
-exports.createPost = async ({ title, content, authorId, isPublished, ...optionalData }) => {
+exports.createPost = async ({ title, content, authorId, isPublished, files, ...optionalData }) => {
     try {
+        const filePaths = files ? files.map(file => path.join(__dirname, `../uploads/images/posts/${authorId}`, file.filename)) : [];
         const newPost = await Post.create({
             title,
             content,
@@ -14,6 +17,19 @@ exports.createPost = async ({ title, content, authorId, isPublished, ...optional
 
         return newPost;
     } catch (error) {
+        // 파일이 업로드된 경우 파일 삭제
+        if (files && files.length > 0) {
+            console.log('파일 존재\n', files);
+            setTimeout(() => {
+                files.forEach(file => {
+                    const filePath = path.join(__dirname, `../uploads/images/posts/${authorId}`, file.filename);
+                    if (fs.existsSync(filePath)) {
+                        fs.unlinkSync(filePath);
+                    }
+                })
+                console.log('파일 삭제 완료');
+            }, 10000); // 10초 후 삭제
+        }
         throw error;
     }
 };
