@@ -2,23 +2,41 @@ const Sequelize = require('sequelize');
 
 class SocialAccount extends Sequelize.Model {
     static initiate(sequelize) {
-        // 모델 정보, 테이블 정보 입력
-
         SocialAccount.init({
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+                comment: 'PK'
+            },
             socialId: {
                 type: Sequelize.STRING(50),
                 allowNull: false,
                 unique: true,
                 field: 'social_id',
+                comment: '소셜 로그인 ID'
             },
             provider: {
-                type: Sequelize.ENUM('kakao', 'google', 'facebook'),
+                type: Sequelize.ENUM('kakao', 'google'),
                 allowNull: false,
+                comment: '소셜 로그인 제공자 (카카오, 구글)'
             },
             accessToken: {
                 type: Sequelize.STRING(255),
                 allowNull: false,
                 field: 'access_token',
+                comment: '소셜 로그인 액세스 토큰'
+            },
+            userId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'users',
+                    key: 'id'
+                },
+                field: 'user_id',
+                comment: '사용자 ID (FK)'
             }
         }, {
             sequelize,

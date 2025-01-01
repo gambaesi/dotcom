@@ -3,10 +3,18 @@ const Sequelize = require('sequelize');
 class Tag extends Sequelize.Model {
     static initiate(sequelize) {
         Tag.init({
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+                comment: 'PK (tag_id)'
+            },
             name: {
                 type: Sequelize.STRING(50),
                 allowNull: false,
                 unique: true,
+                comment: '태그 이름 (유니크)',
             }
         }, {
             sequelize,

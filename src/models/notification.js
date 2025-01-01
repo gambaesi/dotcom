@@ -4,27 +4,46 @@ const Sequelize = require('sequelize');
 
 class Notification extends Sequelize.Model {
     static initiate(sequelize) {
-        // 모델 정보, 테이블 정보 입력
-
         Notification.init({
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+                comment: 'PK (notification_id)'
+            },
             type: {
                 type: Sequelize.ENUM('comment', 'like', 'follow'),
                 allowNull: false,
+                comment: '알림 유형 (comment: 댓글, like: 좋아요, follow: 팔로우)'
             },
             message: {
                 type: Sequelize.STRING(255),
                 allowNull: false,
+                comment: '알림 내용'
             },
             link: {
                 type: Sequelize.STRING(500),
                 allowNull: true,
+                comment: '관련 링크'
             },
             isRead: {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: false,
                 field: 'is_read',
+                comment: '알림 읽음 여부 (기본값: false)'
             },
+            userId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'users',
+                    key: 'id'
+                },
+                field: 'user_id',
+                comment: '알림을 받은 사용자 ID (FK)'
+            }
         }, {
             sequelize,
             timestamps: true,

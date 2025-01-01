@@ -1,24 +1,14 @@
 const Sequelize = require('sequelize');
 
-class Like extends Sequelize.Model {
+class PostImage extends Sequelize.Model {
     static initiate(sequelize) {
-        Like.init({
+        PostImage.init({
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
                 allowNull: false,
-                comment: 'PK (like_id)'
-            },
-            userId: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'users',
-                    key: 'id'
-                },
-                field: 'user_id',
-                comment: '사용자 ID (FK)'
+                comment: 'PK (image_id)'
             },
             postId: {
                 type: Sequelize.INTEGER,
@@ -29,23 +19,33 @@ class Like extends Sequelize.Model {
                 },
                 field: 'post_id',
                 comment: '게시글 ID (FK)'
+            },
+            imageUrl: {
+                type: Sequelize.STRING(200),
+                allowNull: true,
+                field: 'image_url',
+                comment: '이미지 저장 경로'
+            },
+            originalName: {
+                type: Sequelize.STRING,
+                allowNull: true,
+                field: 'original_name',
+                comment: '원본 이미지 파일 이름'
             }
         }, {
             sequelize,
             timestamps: true,
-            underscored: true,
-            paranoid: true,
+            underscored: false,
+            paranoid: false,
             charset: 'utf8mb4',
             collate: 'utf8mb4_general_ci',
-            tableName: 'likes',
+            tableName: 'post_images',
         })
     }
 
     static associate(db) {
-        // N:1 (단방향 관계)
-        db.Like.belongsTo(db.User, { foreignKey: 'user_id', targetKey: 'id' });
-        db.Like.belongsTo(db.Post, { foreignKey: 'post_id', targetKey: 'id' });
+        db.PostImage.belongsTo(db.Post, { foreignKey: 'post_id' });
     }
 }
 
-module.exports = Like;
+module.exports = PostImage;

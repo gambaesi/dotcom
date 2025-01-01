@@ -3,10 +3,38 @@ const Sequelize = require('sequelize');
 class Comment extends Sequelize.Model {
     static initiate(sequelize) {
         Comment.init({
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+                comment: 'PK (comment_id)'
+            },
             content: {
                 type: Sequelize.TEXT,
                 allowNull: false,
+                comment: '댓글 내용'
             },
+            userId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'users',
+                    key: 'id',
+                },
+                field: 'user_id',
+                comment: '사용자 ID (FK)'
+            },
+            postId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'posts',
+                    key: 'id',
+                },
+                field: 'post_id',
+                comment: '게시글 ID (FK)'
+            }
         }, {
             sequelize,
             timestamps: true,
