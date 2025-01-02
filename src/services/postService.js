@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 const Post = require('../models/post');
 const PostImage = require('../models/postImage');
 
-exports.createPost = async ({ title, content, authorId, isPublished, files, ...optionalData }) => {
+exports.createPost = async ({ title, content, authorId, isPublished, files, imageUrls, ...optionalData }) => {
     try {
         const newPost = await Post.create({
             title,
@@ -16,9 +16,10 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, ...o
         });
 
         if (files && files.length > 0) {
-            const imageRecords = files.map(file => ({
+            const imageRecords = files.map((file, index) => ({
                 postId: newPost.id,
-                imageUrl: path.join(__dirname, `../uploads/images/posts/${authorId}`, file.filename),
+                //imageUrl: path.join(__dirname, `../uploads/images/posts/${authorId}`, file.filename),
+                imageUrl: imageUrls[index],
                 originalName: file.originalname
             }));
             await PostImage.bulkCreate(imageRecords);
@@ -27,6 +28,7 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, ...o
         return newPost;
     } catch (error) {
         // 파일이 업로드된 경우 파일 삭제
+        /*
         if (files && files.length > 0) {
             console.log('파일 존재\n', files);
             setTimeout(() => {
@@ -39,6 +41,7 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, ...o
                 console.log('파일 삭제 완료');
             }, 10000); // 10초 후 삭제
         }
+        */
         throw error;
     }
 };

@@ -29,6 +29,7 @@ const createPostSchema = Joi.object({
         "boolean.base": "게시 여부는 boolean 값이어야 합니다.",
         "any.required": "게시 여부는 필수 입력값입니다."
     }),
+    imageUrls: Joi.array().items(Joi.string().uri()).optional(),
 });
 
 const updatePostSchema = Joi.object({
