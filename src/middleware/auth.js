@@ -8,7 +8,7 @@ const authenticateToken = (req, res, next) => {
             return res.error('토큰이 제공되지 않았습니다.', 'TOKEN_NOT_PROVIDED', 401);
         }
 
-        jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (error, user) => {
             if (error) {
                 return res.error('인증된 사용자만 접근 가능한 라우트입니다.', 'FORBIDDEN_ACCESS', 403);
             }

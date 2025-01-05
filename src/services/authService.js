@@ -59,14 +59,14 @@ exports.login = async ({ email, password }) => {
         // 액세스 토큰 생성
         const accessToken = jwt.sign(
             { id: user.id, email: user.email },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: '1h' }
         );
 
         // 리프레시 토큰 생성
         const refreshToken = jwt.sign(
             { id: user.id },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: '7d' }
         );
 
@@ -78,7 +78,7 @@ exports.login = async ({ email, password }) => {
 
 exports.refreshAccessToken = async (refreshToken) => {
     try {
-        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY);
 
         const userId = decoded.id;
 
@@ -89,7 +89,7 @@ exports.refreshAccessToken = async (refreshToken) => {
 
         const newAccessToken = jwt.sign(
             { id: user.id, email: user.email },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: '1h' }
         );
 

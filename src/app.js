@@ -43,7 +43,7 @@ const app = express();
 passportConfig();
 
 // 포트 설정
-app.set('port', process.env.PORT || 3051);
+app.set('port', process.env.PORT);
 
 // 미들웨어
 app.use(cors());
@@ -71,11 +71,11 @@ app.use(customMorgan);
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET || 'gambaesi'));
+app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET || 'gambaesi',
+    secret: process.env.COOKIE_SECRET_KEY,
     cookie: {
         httpOnly: true,
         secure: false,
