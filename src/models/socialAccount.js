@@ -24,7 +24,7 @@ class SocialAccount extends Sequelize.Model {
             },
             accessToken: {
                 type: Sequelize.STRING(255),
-                allowNull: false,
+                allowNull: true,
                 field: 'access_token',
                 comment: '소셜 로그인 액세스 토큰'
             },

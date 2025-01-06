@@ -44,6 +44,24 @@ exports.login = async (req, res, next) => {
     }
 }
 
+exports.socialLogin = (req, res, next) => {
+    try {
+        const { accessToken, refreshToken } = req.user;
+
+        res.setHeader('Authorization', `Bearer ${accessToken}`);
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.success('로그인에 성공했습니다.', {} , 200);
+    } catch (error) {
+        next(error);
+    }
+}
+
 exports.logout = (req, res, next) => {
     try {
         return res.success('로그아웃이 완료되었습니다.', null, 204);

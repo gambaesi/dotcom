@@ -1,8 +1,8 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const path = require('path');
-const session = require('express-session');
+//const path = require('path');
+//const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
 const cors = require('cors');
@@ -16,6 +16,10 @@ const responseMiddleware = require('./middleware/response');
 
 // 환경 변수 로드
 dotenv.config();
+
+// passport
+const passportConfig = require('./passport');
+passportConfig();
 
 // 라우터
 const authRouter = require('./routes/auth');
@@ -69,18 +73,18 @@ app.use(customMorgan);
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET_KEY,
-    cookie: {
-        httpOnly: true,
-        secure: false,
-    }
-}));
+// app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
+// app.use(session({
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: process.env.COOKIE_SECRET_KEY,
+//     cookie: {
+//         httpOnly: true,
+//         secure: false,
+//     }
+// }));
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 app.use(responseMiddleware);
 
 // 라우터 연결
