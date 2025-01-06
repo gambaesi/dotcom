@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dayjs = require('dayjs');
 const User = require('../models/user');
+const { JWT_SECRET_KEY, JWT_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } = require('../config/jwt');
 
 exports.createUser = async ({ email, password, name, ...optionalData }) => {
     try {
@@ -59,15 +60,15 @@ exports.login = async ({ email, password }) => {
         // 액세스 토큰 생성
         const accessToken = jwt.sign(
             { id: user.id, email: user.email },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: '1h' }
+            JWT_SECRET_KEY,
+            { expiresIn: JWT_EXPIRES_IN }
         );
 
         // 리프레시 토큰 생성
         const refreshToken = jwt.sign(
             { id: user.id },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: '7d' }
+            JWT_SECRET_KEY,
+            { expiresIn: JWT_REFRESH_EXPIRES_IN }
         );
 
         return { accessToken, refreshToken };
@@ -78,7 +79,7 @@ exports.login = async ({ email, password }) => {
 
 exports.refreshAccessToken = async (refreshToken) => {
     try {
-        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY);
+        const decoded = jwt.verify(refreshToken, JWT_SECRET_KEY);
 
         const userId = decoded.id;
 
@@ -89,8 +90,8 @@ exports.refreshAccessToken = async (refreshToken) => {
 
         const newAccessToken = jwt.sign(
             { id: user.id, email: user.email },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: '1h' }
+            JWT_SECRET_KEY,
+            { expiresIn: JWT_EXPIRES_IN }
         );
 
         return { newAccessToken };

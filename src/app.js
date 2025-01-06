@@ -18,7 +18,6 @@ const responseMiddleware = require('./middleware/response');
 dotenv.config();
 
 // 라우터
-const passportConfig = require('./passport');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 
@@ -40,7 +39,6 @@ initializeDB();
 
 // 앱 생성
 const app = express();
-passportConfig();
 
 // 포트 설정
 app.set('port', process.env.PORT);
