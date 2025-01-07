@@ -44,14 +44,17 @@ module.exports = () => {
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             if (!profile || !profile.id || !profile.provider) {
-                throw new Error('카카오 프로필 정보가 유효하지 않습니다.');
+                const error = new Error('카카오 프로필 정보가 유효하지 않습니다.');
+                error.status = 400;
+                error.name = 'KAKAO_PROFILE_ERROR';
+                throw error;
             }
 
             const existingUser = await SocialAccount.findOne({ where: { socialId: profile.id, provider: 'kakao' } });
             const user = existingUser || await createNewUser(profile);
 
             const tokens = generateTokens(user);
-            
+
             done(null, tokens);
         } catch (error) {
             done(error, null);

@@ -101,6 +101,7 @@ app.use((req, res, next) => {
 // 에러 핸들링 미들웨어
 app.use((error, req, res, next) => {
     console.log(chalk.red('에러 처리 미들웨어로 도착했어요'));
+    console.log(chalk.red('Error Status:'), error?.status);
     console.log(chalk.red('Error Name:'), error?.name);
     console.log(chalk.red('Error Message:'), error?.message);
     console.log(chalk.red('Error Stack:'), error?.stack);
