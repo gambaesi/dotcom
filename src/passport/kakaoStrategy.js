@@ -4,21 +4,34 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY, JWT_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } = require('../config/jwt');
 const SocialAccount = require('../models/socialAccount');
 const User = require('../models/user');
+const { sequelize } = require('../models');
 
 async function createNewUser(profile) {
-    const newUser = await User.create({
-        email: `${profile.id}@kakao`,
-        password: '',
-        name: profile.username,
-    });
+    const transaction = await sequelize.transaction();
 
-    await SocialAccount.create({
-        socialId: profile.id,
-        provider: profile.provider,
-        userId: newUser.id,
-    });
+    try {
+        // users INSERT
+        const newUser = await User.create({
+            email: `${profile.id}@kakao`,
+            password: '',
+            name: profile.username,
+        }, { transaction });
 
-    return newUser;
+        // social_acount INSERT
+        await SocialAccount.create({
+            socialId: profile.id,
+            provider: profile.provider,
+            userId: newUser.id,
+        }, { transaction });
+
+        await transaction.commit();
+
+        return newUser;
+    } catch (error) {
+        await transaction.rollback();
+
+        throw error;
+    }
 }
 
 function generateTokens(user) {
