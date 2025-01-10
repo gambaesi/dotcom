@@ -1,6 +1,7 @@
 const figlet = require('figlet');
 const chalk = require('chalk');
 const app = require('./app'); // app.js에서 Express 앱 가져오기
+const webSocket = require('./socket')
 
 // 서버 실행
 figlet('dotcom', (figletError, data) => {
@@ -12,7 +13,9 @@ figlet('dotcom', (figletError, data) => {
 
     // 포트 가져와서 서버 실행
     const PORT = app.get('port');
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
         console.info(chalk.yellow.bold(PORT), chalk.yellow.bold('PORT 준비 완료'));
     });
+
+    webSocket(server);
 });

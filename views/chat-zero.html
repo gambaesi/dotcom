@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chat💬</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div>F12를 눌러 console 탭과 network 탭을 확인하세요.</div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io.connect('http://localhost:3051', {
+            path: '/socket.io',
+            transports: ['websocket'] // 폴링 방식 사용 아예 안하고 싶을 때
+        });
+        socket.on('news', (data) => {
+            console.log(data);
+            socket.emit('reply', 'Hello Node.JS');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 const express = require('express');
 //const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-//const path = require('path');
+const path = require('path');
 //const session = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
@@ -24,6 +24,7 @@ passportConfig();
 // 라우터
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
+const chatRouter = require("./routes/chat");
 
 // DB 연결 및 설정
 const { sequelize } = require('./models');
@@ -70,7 +71,7 @@ const customMorgan = morgan((tokens, req, res) => {
     ].join(' ');
 });
 app.use(customMorgan);
-//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
@@ -90,6 +91,7 @@ app.use(responseMiddleware);
 // 라우터 연결
 app.use('/auth', authRouter);
 app.use('/posts', postRouter);
+app.use('/', chatRouter);
 
 // 404 에러 처리 미들웨어
 app.use((req, res, next) => {

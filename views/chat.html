@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅💬</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>채팅💬</h1>
+            <p>채팅방에 입장하거나 새로운 채팅방을 만들 수 있습니다.<br>(화면은 챗지피티의 도움을 받았습니다 . . 🥹)</p>
+        </header>
+
+        <!-- 채팅방 목록 -->
+        <div class="room-list-area">
+            <h3>채팅방 목록</h3>
+            <ul class="room-list">
+                <!-- 채팅방 목록 동적으로 표시됨 -->
+            </ul>
+            <div class="create-room-area">
+                <input type="text" id="room-name-input" placeholder="채팅방 이름을 입력하세요 !"/>
+                <button class="btn-primary" id="create-room-btn">새로운 채팅방 만들기</button>
+            </div>
+        </div>
+
+        <!-- 채팅창 -->
+        <div class="chat-area" style="display: none;">
+            <div class="messages" id="messages"></div>
+            <div class="message-input">
+                <input type="text" id="message-input" class="input-field" placeholder="메시지를 입력하세요 !" />
+                <button id="send-message" class="btn-primary">전송</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io.connect('http://localhost:3051', {
+            path: '/socket.io',
+            transports: ['websocket']
+        });
+
+        let currentRoom = ''; // 현재 선택된 채팅방
+
+        // 채팅방 목록 업데이트 요청
+        socket.emit('getRooms');
+
+        // 채팅방 목록 동적 표시
+        socket.on('roomList', (rooms) => {
+            const roomListElement = document.querySelector('.room-list');
+            roomListElement.innerHTML = ''; // 기존 목록 초기화
+            rooms.forEach(room => {
+                const roomElement = document.createElement('li');
+                roomElement.textContent = room;
+                roomElement.addEventListener('click', () => {
+                    currentRoom = room; // 클릭한 방 이름 저장
+                    socket.emit('joinRoom', room);
+                    document.querySelector('.room-list-area').style.display = 'none'; // 채팅방 목록 숨기기
+                    document.querySelector('.chat-area').style.display = 'block'; // 채팅 창 보이기
+                });
+                roomListElement.appendChild(roomElement);
+            });
+        });
+
+        /// 메시지 전송 함수
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            if (currentRoom && message !== '') {
+                socket.emit('sendMessage', currentRoom, message, socket.id); // roomName과 message 전달
+                messageInput.value = ''; // 메시지 입력란 초기화
+            } else {
+                alert('채팅방을 선택하고 메시지를 입력해주세요.');
+            }
+        }
+
+        // 메시지 전송 버튼 클릭 이벤트
+        document.getElementById('send-message').addEventListener('click', sendMessage);
+
+        // 엔터 키를 눌렀을 때 메시지 전송
+        document.getElementById('message-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // 기본 엔터 동작 방지
+                sendMessage();
+            }
+        });
+
+        // 서버에서 메시지 받기
+        socket.on('newMessage', (message, senderId) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            // 내 메시지인지 상대방 메시지인지 구분
+            if (senderId === socket.id) {
+                messageElement.classList.add('my-message'); // 내 메시지: 오른쪽
+            } else {
+                messageElement.classList.add('other-message'); // 상대방 메시지: 왼쪽
+            }
+
+            messageElement.textContent = message;
+            document.getElementById('messages').appendChild(messageElement);
+
+            // 자동 스크롤
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+
+        // 채팅방 만들기 함수
+        function createRoom() {
+            const roomNameInput = document.getElementById('room-name-input');
+            const roomName = roomNameInput.value.trim();
+
+            if (roomName) {
+                roomNameInput.value = ''; // 텍스트 박스 초기화
+
+                // requestAnimationFrame을 사용하여 DOM 업데이트 후 emit 실행
+                requestAnimationFrame(() => {
+                    socket.emit('createRoom', roomName); // 새로운 방 생성
+                });
+            } else {
+                alert('채팅방 이름을 입력해주세요.');
+            }
+        }
+
+        // 새로운 채팅방 만들기 버튼 클릭 이벤트
+        document.getElementById('create-room-btn').addEventListener('click', createRoom);
+
+        // 엔터 키를 눌렀을 때 채팅방 만들기
+        document.getElementById('room-name-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // 기본 엔터 동작 방지
+                createRoom();
+            }
+        });
+    </script>
+</body>
+
+</html>

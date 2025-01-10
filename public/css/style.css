@@ -1,0 +1,242 @@
+/* 기존 스타일을 이어서 트렌디하게 수정 */
+
+/* 기본적인 레이아웃 */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* 헤더 */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #4A90E2;
+}
+
+header p {
+    font-size: 1rem;
+    color: #888;
+}
+
+/* 채팅방 목록 */
+.room-list-area {
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.room-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.room-list li {
+    padding: 15px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.room-list li:hover {
+    background-color: #e1e8f1;
+    transform: translateY(-2px);
+}
+
+.room-list li:active {
+    background-color: #c6d6e3;
+    transform: translateY(1px);
+}
+
+/* 버튼 스타일 */
+button {
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #4A90E2;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #357ABD;
+}
+
+.btn-secondary {
+    background-color: #e2e2e2;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #ccc;
+}
+
+/* 채팅방 이름 입력 필드 스타일 */
+.create-room-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.create-room-area input[type="text"] {
+    width: 70%; /* 텍스트 박스는 70% */
+    padding: 12px;
+    margin-right: 20px; /* 텍스트 박스와 버튼 사이 여백 */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    height: 36px; /* 버튼과 동일한 높이 설정 */
+}
+
+.create-room-area button#create-room-btn {
+    width: 30%; /* 버튼은 30% */
+    background-color: #4A90E2;
+    color: white;
+    font-weight: bold;
+    padding: 12px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 48px; /* 버튼 높이 동일하게 설정 */
+}
+
+.create-room-area button#create-room-btn:hover {
+    background-color: #357ABD;
+}
+
+/* 입력 필드 */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+/* 채팅방 입장/생성 폼 */
+.create-room-form {
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.room-entry {
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.room-entry input {
+    margin-bottom: 10px;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* 채팅 창 */
+/* 내 메시지 스타일 (오른쪽 정렬) */
+.my-message {
+    background-color: #0084ff; /* 내 메시지 색 */
+    color: white;
+    align-self: flex-end; /* 오른쪽에 정렬 */
+    text-align: right; /* 오른쪽 정렬 */
+}
+
+/* 상대방 메시지 스타일 (왼쪽 정렬) */
+.other-message {
+    background-color: #f1f0f0; /* 상대방 메시지 색 */
+    color: black;
+    align-self: flex-start; /* 왼쪽에 정렬 */
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+.chat-area {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.messages {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e1e8f1;
+    border-radius: 8px;
+    color: #333;
+    max-width: 100%;
+}
+
+.message-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.message-input input {
+    width: 85%;
+    margin-right: 10px;
+}
+
+.message-input button {
+    width: 10%;
+    background-color: #4A90E2;
+    color: white;
+    font-weight: bold;
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .message-input input {
+        width: 70%;
+    }
+
+    .message-input button {
+        width: 20%;
+    }
+}
