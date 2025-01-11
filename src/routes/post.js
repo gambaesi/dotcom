@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middleware/auth');
-const { createPost, updatePostById, softDeletePostById, getPostById, getPosts } = require('../controllers/postController');
 const validate = require('../middleware/validate');
-const { postIdSchema, createPostSchema, updatePostSchema, getPostsSchema } = require('../validation/postValidation');
 //const upload = require('../middleware/multer');
 const { upload, uploadToS3Handler } = require('../middleware/s3');
+const { createPost, updatePostById, softDeletePostById, getPostById, getPosts } = require('../controllers/postController');
+const { postIdSchema, createPostSchema, updatePostSchema, getPostsSchema } = require('../validation/postValidation');
 
 // 인증 미들웨어
 router.use(authenticateToken);
