@@ -4,8 +4,11 @@ const path = require('path');
 const { Op } = require('sequelize');
 const Post = require('../models/post');
 const PostImage = require('../models/postImage');
+const { sequelize } = require('../models');
 
 exports.createPost = async ({ title, content, authorId, isPublished, files, imageUrls, ...optionalData }) => {
+    const transaction = await sequelize.transaction();
+
     try {
         const newPost = await Post.create({
             title,
@@ -13,8 +16,9 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, imag
             authorId,
             isPublished,
             ...optionalData
-        });
+        }, { transaction });
 
+        let urls = [];
         if (files && files.length > 0) {
             const imageRecords = files.map((file, index) => ({
                 postId: newPost.id,
@@ -22,10 +26,28 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, imag
                 imageUrl: imageUrls[index],
                 originalName: file.originalname
             }));
-            await PostImage.bulkCreate(imageRecords);
+            const images = await PostImage.bulkCreate(imageRecords, { transaction });
+            urls = images.map(image => ({
+                id: image.dataValues.id,
+                url: image.dataValues.imageUrl,
+            }));
         }
 
-        return newPost;
+        await transaction.commit();
+
+        const postResponse = {
+            id: newPost.id,
+            title: newPost.title,
+            content: newPost.content,
+            authorId: newPost.authorId,
+            isPublished: newPost.isPublished,
+            views: newPost.views,
+            createdAt: newPost.createdAt,
+            updatedAt: newPost.updatedAt,
+            imageUrls: urls
+        };
+
+        return postResponse;
     } catch (error) {
         // 파일이 업로드된 경우 파일 삭제
         /*
@@ -42,6 +64,7 @@ exports.createPost = async ({ title, content, authorId, isPublished, files, imag
             }, 10000); // 10초 후 삭제
         }
         */
+        await transaction.rollback();
         throw error;
     }
 };

@@ -29,7 +29,6 @@ async function createNewUser(profile) {
         return newUser;
     } catch (error) {
         await transaction.rollback();
-
         throw error;
     }
 }
