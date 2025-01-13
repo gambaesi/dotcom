@@ -1,5 +1,5 @@
 const multer = require('multer');
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { v4: uuidv4 } = require('uuid');
 const dayjs = require('dayjs');
 const path = require('path');
@@ -27,9 +27,21 @@ const upload = multer({
         }
         cb(null, true);
     }
-})
+});
 
-const uploadToS3 = async (files, folderName, userId) => {
+const uploadToS3Handler = async (req, res, next) => {
+    try {
+        const userId = req.body.authorId;
+        const folderName = `posts/${userId}`; // 작성자 ID로 폴더 생성
+        const imageUrls = await uploadFile(req.files, folderName, userId);
+        req.body.imageUrls = imageUrls;
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
+const uploadFile = async (files, folderName, userId) => {
     try {
         const promises = files.map(async (file) => {
             const formattedDate = dayjs().format('YYYYMMDDHHmmss');
@@ -51,18 +63,22 @@ const uploadToS3 = async (files, folderName, userId) => {
     } catch (error) {
         throw error;
     }
-}
+};
 
-const uploadToS3Handler = async (req, res, next) => {
+const deleteFile = async (bucketName, key) => {
     try {
-        const userId = req.body.authorId;
-        const folderName = `posts/${userId}`; // 작성자 ID로 폴더 생성
-        const imageUrls = await uploadToS3(req.files, folderName, userId);
-        req.body.imageUrls = imageUrls;
-        next();
-    } catch (error) {
-        next(error);
-    }
-}
+        const params = {
+            Bucket: bucketName,
+            Key: key,
+        }
 
-module.exports = { upload, uploadToS3, uploadToS3Handler };
+        console.log(`Deleted S3 object: ${key}`);
+        const result = await s3.send(new DeleteObjectCommand(params));
+        return result;
+    } catch (error) {
+        console.error(`Failed to delete S3 object: ${key}`, error);
+        throw error;
+    }
+};
+
+module.exports = { upload, uploadToS3Handler, uploadFile, deleteFile };

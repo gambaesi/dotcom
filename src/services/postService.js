@@ -5,6 +5,7 @@ const { Op } = require('sequelize');
 const Post = require('../models/post');
 const PostImage = require('../models/postImage');
 const { sequelize } = require('../models');
+const { deleteFile } = require('../middleware/s3');
 
 exports.createPost = async ({ title, content, authorId, isPublished, files, imageUrls, ...optionalData }) => {
     const transaction = await sequelize.transaction();
@@ -85,14 +86,35 @@ exports.updatePostById = async (postId, updateData) => {
 };
 
 exports.softDeletePostById = async (postId) => {
+    const transaction = await sequelize.transaction();
+
     try {
-        const deletedCount = await Post.destroy({ where: { id: postId} });
+        const authorId = await Post.findOne({ where: { id: postId }, attributes: ['author_id'], transaction });
+        const userId = authorId.dataValues.author_id;
+
+        const deletedCount = await Post.destroy({ where: { id: postId }, transaction } );
         if (deletedCount === 0) {
             return { error: '해당 게시글을 찾을 수 없습니다.', code: 'POST_NOT_FOUND' };
         }
 
+        const images = await PostImage.findAll({ where: { postId: postId }, transaction })
+        if (images.length > 0) {
+            await Promise.all(
+                images.map(async (image) => {
+                    const imageUrl = image.imageUrl;
+                    const imageKey = `posts/${userId}/${imageUrl.split('/').pop()}`;
+
+                    await deleteFile(process.env.S3_BUCKET_NAME, imageKey);
+                    await image.destroy({ transaction });
+                })
+            )
+        };
+
+        await transaction.commit();
+
         return {};
     } catch (error) {
+        await transaction.rollback();
         throw error;
     }
 };
