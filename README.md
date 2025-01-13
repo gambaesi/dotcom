@@ -1,7 +1,9 @@
 # 닷컴 (Dotcom)
 
+
 ## 설명
 닷컴은 Node.js와 Express를 기반으로 기본적인 웹 애플리케이션 기능을 구현한 백엔드 프로젝트입니다.
+
 
 ## 기능
 1. **회원가입 및 로그인**
@@ -17,6 +19,7 @@
 
 3. **채팅 기능**
     - 실시간 채팅 기능 (Socket.IO 사용)
+
 
 ## 설치 방법
 1. 리포지토리를 클론합니다:
@@ -38,6 +41,7 @@
 5. 서버가 실행되면 Swagger 문서를 통해 API를 확인하고, Try it out 버튼을 눌러 직접 테스트할 수 있습니다.
    ```markdown
    [Swagger 문서] https://app.swaggerhub.com/apis-docs/gambaesi/dotcom/v1.0.0#/
+
 
 ## 기술 스택
 - **Backend Framework**: Node.js, Express
