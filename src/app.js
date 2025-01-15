@@ -54,15 +54,17 @@ app.use(cors());
 if (process.env.NODE_ENV === 'production') {
     // 보안 모듈은 운영 환경에서만 활성화
     app.use(helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],  // 자기 자신만 허용
-                styleSrc: ["'self'"],    // 자기 자신만 스타일시트 허용
-                scriptSrc: ["'self'"],   // 자기 자신만 스크립트 허용
-                imgSrc: ["'self'"],      // 자기 자신만 이미지 허용
-                // 필요에 따라 추가할 부분 없음
-            },
-        },
+        strictTransportSecurity: false,
+        contentSecurityPolicy: false,
+        // contentSecurityPolicy: {
+        //     directives: {
+        //         defaultSrc: ["'self'"],  // 자기 자신만 허용
+        //         styleSrc: ["'self'"],    // 자기 자신만 스타일시트 허용
+        //         scriptSrc: ["'self'"],   // 자기 자신만 스크립트 허용
+        //         imgSrc: ["'self'"],      // 자기 자신만 이미지 허용
+        //         // 필요에 따라 추가할 부분 없음
+        //     },
+        // },
     })); // helmet 옵션이 다양한데, 기본 옵션 중 엄격한 경우가 많음. 상황에 따라 false 필요.
     app.use(hpp());
     // app.use(morgan('combined')); // 개발 시, 'dev'
