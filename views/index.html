@@ -5,12 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gambaesi-dotcom</title>
+
+    <style>
+        @keyframes scrollAnimation {
+            0% {
+                transform: translateX(0%); /* 화면 왼쪽 밖 */
+            }
+            100% {
+                transform: translateX(100%); /* 화면 오른쪽 밖 */
+            }
+        }
+    </style>
 </head>
 
 <body>
     <h1>Welcome 🤶</h1>
     <h1>gambaesi-dotcom</h1>
-    <!-- <img src="/apple-touch-icon.png"> -->
+
+    <!-- <h1>Click here to test 🔽</h1> -->
+    <h1 style="color: blue; white-space: nowrap; animation: scrollAnimation 5s linear infinite; animation-delay: 0s;">Click on the dog to test 🔽</h1>
+
+    <a href="https://app.swaggerhub.com/apis-docs/gambaesi/dotcom/v1.0.0#/">
+        <img src="/apple-touch-icon.png">
+    </a>
+
 </body>
 
 </html>
